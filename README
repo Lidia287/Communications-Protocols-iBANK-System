@@ -1,0 +1,98 @@
+Lidia Istrate
+325CD
+
+
+
+				Tema2
+				Protocoale de comunicatie
+
+
+
+
+
+
+	Am declarat o structura pentru a retine datele fiecarei persoane din fisierul dat :
+
+	struct persoana
+{
+	char nume[13];
+	char prenume[13];
+	int numar_card;
+	int pin;
+	char parola_secreta[10];
+	double sold;
+	int login;  // -1 nu e logat 1 e logat
+	int unlock; // -1 e blocat  1 e deblocat
+	int esuari;
+
+};
+
+	Atat pentru server cat si pentru client am utilizat scheletul din laboratorul de TCP 
+multiplexare pe care am adaugat functionalitatile necesare.
+
+
+
+			server.c
+
+
+	Am creat 2 socketi : sockfd_udp (pentru conexiunea UDP) si sockfd (pentru conexiunea TCP).
+
+	Utilizez apelul select pentru multiplexare si conform scheletului verific mai multe cazuri
+in care este setat socketul. 
+
+	Initial, setez si sockfd si sockfd_udp si 0. 
+
+	Daca este activ socketul sockfd_udp -> are loc actiunea de unlock : parsez datele si caut 
+persoana dupa numar_card . Daca numarul de card nu exista , trimit la client pe socketul udp un 
+mesaj : "badd" pentru a sti ca nu se merge mai departe cu trimiterea parolei . Daca exista acest 
+client , trimit mesajul "good" , iar acesta imi va trimite inapoi o parola , daca este buna ,
+clientul este deblocat , daca nu , deblocarea esueaza. 
+
+	Daca este activ file descriptorul 0 : citesc de la stdin , comanda pentru server : quit ,
+iar programul se va termina.
+
+	Altfel ,astept un mesaj pe TCP de la client . In functie de fiecare comanda fac actiunile
+corespunzatoare . O chichita consta in apelul de listsold de exemplu , atunci cand sunt conectati
+mai multi clienti in acelasi timp , am utilizat un vector sockClient care tine minte numarul de 
+card corespunzator fiecarui socket , astfel , cand din terminalul cu socket 5 dar comanda listsold,
+nu se va incurca cu clientul din terminalul de pe socketul 6. 
+
+	Am creat o matrice de char-uri fileNames[i][BUFLEN] pentru a tine minte numele fiecarui 
+fisier asociat fiecarui socket . Astfel , fileNames[i] este numele fisierului pentru clientul
+de pe socketul i.
+
+
+
+
+
+
+
+
+			client.c
+
+	
+	Citesc comenzile de la tastatura si in functie de tipul comenzii trimit pe socketul de UDP 
+sau de TCP . 
+
+	Pentru a putea scrie in acelasi fisier si din client si din server , il deschid de fiecare 
+data cu fopen("logfile","a") si il inchid apoi, redeschizandu-l cand urmeaza sa mai scriu un lucru.
+
+	Functionalitatea din client este asemanatoare cu cea din server. Atunci cand dupa ce am
+trimis serverului comanda , acesta mai are nevoie de o aprobare precum "y" de la transfer, serverul
+va trimite la client un mesaj : "badd" (esec) sau "good" (succes). Clientul va primi mesajul si 
+va sti apoi daca mai trebuie sa trimita sau nu un mesaj inapoi.
+ 
+	In client int fdmax = 9; ---> fdmax este definit la 9 iar 
+in server #define MAX_CLIENTS	5 ---> era predefinit din laboratorul de multiplexare.
+
+
+
+
+
+
+
+
+			
+
+
+

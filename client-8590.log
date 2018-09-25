@@ -1,0 +1,41 @@
+login 4445 22
+IBANK> −4 : Numar card inexistent
+
+login 456123 444
+IBANK> −3 : Pin gresit
+
+login 456123 3333
+IBANK> −3 : Pin gresit
+
+login 456123 444
+IBANK> −5 : Card blocat
+
+unlock
+UNLOCK> Trimite parola secreta
+qwertyp4
+UNLOCK> Client deblocat
+
+listsold
+-1 : Clientul nu este autentificat
+
+login 456123 8799
+IBANK> Welcome Popovici George
+
+transfer 333 222
+IBANK> −4 : Numar card inexistent
+
+transfer 111789 9000.01
+IBANK> −8 : Fonduri insuficiente
+
+transfer 11173 99
+IBANK> −4 : Numar card inexistent
+
+transfer 111789 8000
+IBANK> Transfer 8000.00 catre Ionescu Georgeta? [y/n]
+y
+IBANK> Transfer realizat cu succes
+
+listsold
+IBANK> 1000.00
+
+quit

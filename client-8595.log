@@ -1,0 +1,13 @@
+login 456123 8799
+IBANK> −2 : Sesiune deja deschisa
+
+login 111789 8997
+IBANK> Welcome Ionescu Georgeta
+
+listsold
+IBANK> 19820.30
+
+logout
+IBANK> Clientul a fost deconectat
+
+quit
